@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>
+      Good Practices for Capability URLs
+    </title>
+    <script class="remove" src="http://www.w3.org/Tools/respec/respec-w3c-common">
+		</script>
+    <script class="remove">
+var respecConfig = {
+    specStatus: "ED",
+    shortName: "capability-urls",
+    //publishDate:  "2012-12-12",
+    //previousPublishDate:  "",
+    edDraftURI: "http://w3ctag.github.io/capability-urls/",
+    // lcEnd: "3000-01-01",
+    // crEnd: "3000-01-01",
+    editors: [{
+            name: "Jeni Tennison",
+            company: "ODI",
+            companyURL: "http://www.theodi.org/"
+        }],
+    wg: "Technical Architecture Group",
+    wgURI: "http://www.w3.org/2001/tag/",
+    wgPublicList: "www-tag",
+    wgPatentURI: "http://www.w3.org/2001/tag/disclosures",
+    otherLinks: [{
+            key: "Repository",
+            data: [{
+                    value: "We are on Github.",
+                    href: "https://github.com/w3ctag/capability-urls"
+                }, {
+                    value: "File a bug.",
+                    href: "https://github.com/w3ctag/capability-urls/issues"
+                }, {
+                    value: "Commit history.",
+                    href: "https://github.com/w3ctag/capability-urls/commits/gh-pages"
+                }
+            ]
+        }
+    ],
+    inlineCSS: true,
+    noIDLIn: true,
+    noLegacyStyle: false
+    };
+    </script>
+    <link href="editorial.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <section id="abstract">
+      <p>
+        Capability URLs grant access to a resource to anyone who has the URL. There are times when this is useful, for example one-shot password reset URLs, but overuse can be problematic as URLs cannot generally be kept secret. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications.
+      </p>
+    </section>
+    <section id="sotd">
+      <p>
+        This is an unofficial draft and work in progress. It has no official standing and is currently only a sketch of an eventual Working Draft.
+      </p>
+    </section>
+    <section id="intro">
+      <h2>
+        Introduction
+      </h2>
+    	<p>There are two broad methods of controlling access to information that is published on the web:</p>
+    	<ol>
+    		<li> the server can have access control measures that require people accessing the content to provide the correct token(s) (such as a password) before the content is accessible</li>
+    		<li> the information can be published at an obscure or unguessable URL, and links to it only provided to people who have permission to access it</li>
+    	</ol>
+    	<p>The URLs used in the second method are known as "capability URLs": an agent who possesses the URL is given the capability to access the information.</p>    	
+    	<p>This document describes:</p>
+    	<ul>
+    		<li>cases where capability URLs are used on the web today</li>
+    		<li>advantages and disadvantages of using capability URLs to control access to content</li>
+    		<li>design considerations when creating websites that use capability URLs</li>
+    		<li>areas of technical development to support the use of capability URLs</li>
+    	</ul>
+    </section>
+  	<section id="examples">
+    	<h2>Example Capability URLs</h2>
+  		<section>
+  			<h2>Password Resets</h2>
+  			<p>
+  				This example is from Dropbox:
+  			</p>
+  			<pre class="example">
+  				Your Dropbox password recently expired. You can reset it <a href="https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset">here</a>.
+  			</pre>
+  			<p>In this case the capability URL is <code>https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset</code>.</p>
+  		</section>
+  		
+  		<section>
+  			<h2>Second Life</h2>
+  			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Reg API capabilities represent permissions to perform certain actions.</blockquote>
+  			<p><small><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Registration API</a></small></p>
+  			<p>
+  				An example capability URL is <code>https://cap.secondlife.com/cap/0/2897456b-6959-473e-9b94-36d8cec1b9c3</code>.
+  			</p>
+  			<p>
+  				They also say:
+  			</p>
+  			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Keep your capability URLs secret! The capabilities granted to you are only meant for you. A capability URL is sensitive much like a password. Moreover, Linden Lab tracks the use of each capability.</blockquote>
+  		</section>
+  		
+  		<section>
+  			<h2>Google Hangouts</h2>
+  		</section>
+  		<section>
+  			<h2>Github Gists</h2>
+  		</section>
+  		<section>
+  			<h2>Doodle polls</h2>
+  		</section>
+  	</section>
+  	<section id="advantages">
+  		<h2>Reasons to Use Capabilty URLs</h2>
+  		
+  		<section>
+  			<h3>No Login Required</h3>
+  			<ul>
+  				<li>users who can't remember login</li>
+  				<li>users who don't want to create account</li>
+  				<li>developers who don't want to support accounts</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>Easy Onward Sharing</h3>
+  			<ul>
+  				<li>invite just one person in organisation</li>
+  				<li>trust they will pass on URL to the rest</li>
+  				<li>reduced administration</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>Easy Client API</h3>
+  			<ol>
+  				<li>perform authentication</li>
+  				<li>request list of capability URLs</li>
+  				<li>use those URLs without authentication</li>
+  			</ol>
+  		</section>
+  	</section>
+  	
+  	<section id="disadvantages">
+  		<h2>Potential Issues</h2>
+  		<section>
+  			<h3>Risk of Exposure</h3>
+  			<p>URLs aren't designed to be secret</p>
+  			<ul>
+  				<li>shown in URL bar</li>
+  				<li>appear in proxy logs</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>Compromise is Hard to Handle</h3>
+  			<p>revoke compromised URL <em>vs</em> revoke compromised user's access</p>
+  		</section>
+  		
+  		<section>
+  			<h2>Web Architecture</h2>
+  			<p>are you providing multiple URIs for the same resource?</p>
+  			<blockquote>
+  				<strong>Good practice: Avoiding URI aliases</strong>
+  				<br />
+  				A URI owner SHOULD NOT associate arbitrarily different URIs with the same resource.
+  			</blockquote>
+  			<p>how do you transition from restricted access to public access</p>
+  			<p>how do you transition from a capability URL to a normal URL</p>
+  		</section>
+  		
+  		<section>
+  			<h2>Beyond the Single Page</h2>
+  			<p>do require capability URLs for onward links?</p>
+  		</section>
+  	</section>
+  	
+  	<section id="recommendations">
+  		<h2>Recommendations</h2>
+  		<section>
+  			<h3>Application Design</h3>
+  			<ul>
+  				<li>when to use capability URLs</li>
+  				<li>alternatives to capability URLs</li>
+  				<li>how to expire capability URLs</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>Canonical URLs</h3>
+  			<p><b>scenario:</b> multiple URLs giving<br />different access to single document</p>
+  			<ul>
+  				<li>
+  					how to relate capability URLs to canonical URL
+  					<ul>
+  						<li>redirections based on <code>Referer</code> header</li>
+  						<li>embedded metadata in pages</li>
+  					</ul>
+  				</li>
+  				<li>
+  					how to transition to canonical URL once public
+  				</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>Capability URL Design</h3>
+  			<ul>
+  				<li>ensuring uniqueness</li>
+  				<li>avoiding guessability</li>
+  				<li>providing human readability</li>
+  			</ul>
+  		</section>
+  		
+  		<section>
+  			<h3>UI Design Considerations</h3>
+  			<p>should there be ways to hide URLs?</p>
+  			<ul>
+  				<li>location bar</li>
+  				<li>status bar</li>
+  				<li>view source</li>
+  			</ul>
+  		</section>
+  	</section>
+  	
+  </body>
+</html>
