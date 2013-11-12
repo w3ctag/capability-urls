@@ -60,9 +60,7 @@ var respecConfig = {
       </p>
     </section>
     <section id="intro">
-      <h2>
-        Introduction
-      </h2>
+      <h2>Introduction</h2>
     	<p>There are two broad methods of controlling access to information that is published on the web:</p>
     	<ol>
     		<li> the server can have access control measures that require people accessing the content to provide the correct token(s) (such as a password) before the content is accessible</li>
@@ -79,33 +77,73 @@ var respecConfig = {
     </section>
   	<section id="examples">
     	<h2>Example Capability URLs</h2>
+      <p>
+        Capability URLs are in widespread usage. This section contains examples from the web where capability URLs are used.
+      </p>
   		<section>
   			<h2>Password Resets</h2>
   			<p>
-  				This example is from Dropbox:
+  				When a user forgets their password to access a site, the site cannot simply tell them what their password is as this would require the site to store and transmit their password as plain text, which is extremely insecure.
+        </p>
+        <p>
+          The pattern that is usually used instead is that the user is sent an email that contains a link that provides the user who has received that link with enough permissions to reset their password. This example is from Dropbox:
   			</p>
   			<pre class="example">
   				Your Dropbox password recently expired. You can reset it <a href="https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset">here</a>.
   			</pre>
-  			<p>In this case the capability URL is <code>https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset</code>.</p>
+  			<p>In this case the capability URL is <code>https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset</code>. Anyone accessing this link is able to change the password for the user with whom the capability URL is associated.</p>
   		</section>
   		
   		<section>
   			<h2>Second Life</h2>
-  			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Reg API capabilities represent permissions to perform certain actions.</blockquote>
-  			<p><small><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Registration API</a></small></p>
+        <figure>
+          <blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Reg API capabilities represent permissions to perform certain actions.</blockquote>
+          <figcaption><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Using capability URLs</a> &ndash; Linden Lab Official:Registration API</figcaption>
+        </figure>
+        <p>
+          Within the Second Life API, user agents aren't required to provide credentials with each action that they wish to take. Instead, they submit a single form with a username and password and the response contains a set of capability URLs for different capabilities. For example:
+        </p>
+        <pre class="example">
+&lt;llsd>
+  &lt;map>
+    &lt;key>create_user&lt;/key>
+    &lt;string>https://cap.secondlife.com/cap/0/35ff3b8c-a30d-4d18-b29a-e3f7f6c79cb6&lt;/string>
+ 
+    &lt;key>check_name&lt;/key>
+    &lt;string>https://cap.secondlife.com/cap/0/6e528ba1-a8b0-4f6b-8b56-362ee6f5cef8&lt;/string>
+ 
+    &lt;key>get_last_names&lt;/key>
+    &lt;string>https://cap.secondlife.com/cap/0/be4e4d2e-c00a-46cd-bb8d-d17cb8e92c9b&lt;/string>
+ 
+    &lt;key>get_error_codes&lt;/key>
+    &lt;string>https://cap.secondlife.com/cap/0/e75f81a5-b7da-4480-8f95-b1cf9d2d680f&lt;/string>
+  &lt;/map>
+&lt;/llsd>
+        </pre>
   			<p>
-  				An example capability URL is <code>https://cap.secondlife.com/cap/0/2897456b-6959-473e-9b94-36d8cec1b9c3</code>.
+  				The documentation provides two guidelines for using these capability URLs:
   			</p>
-  			<p>
-  				They also say:
-  			</p>
-  			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Keep your capability URLs secret! The capabilities granted to you are only meant for you. A capability URL is sensitive much like a password. Moreover, Linden Lab tracks the use of each capability.</blockquote>
+        <figure>
+    			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">
+            <ul>
+              <li>Do not hard-code your capabilities URLs. Either code your capabilities URLs as constants, or better yet, obtain them at run-time. Capability URLs will expire eventually, so fresh ones are always better.</li>
+              <li>Keep your capability URLs secret! The capabilities granted to you are only meant for you. A capability URL is sensitive much like a password. Moreover, Linden Lab tracks the use of each capability.</li>
+            </ul>
+          </blockquote>
+          <figcaption><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Using capability URLs</a> &ndash; Linden Lab Official:Registration API</figcaption>
+        </figure>
   		</section>
   		
   		<section>
   			<h2>Google Hangouts</h2>
+
   		</section>
+      <section>
+        <h2>Google Calendar</h2>
+        <p>
+          Told not to share particular URLs because they provide write access to a calendar. Presumably this is because it can be difficult to authenticate through calendar applications? Or to make it easy to share with other people who don't necessarily use Google Calendar with whom you want to share the calendar.
+        </p>
+      </section>
   		<section>
   			<h2>Github Gists</h2>
   		</section>
@@ -116,31 +154,95 @@ var respecConfig = {
   	<section id="advantages">
   		<h2>Reasons to Use Capabilty URLs</h2>
   		
+      <p>There are three rationales for using capability URLs evident in the examples described above.</p>
+
   		<section>
   			<h3>No Login Required</h3>
+        <p>
+          A capability URL enables a user to access a service without having a login or password on that service. There are three situations where that is a particular advantage:
+        </p>
   			<ul>
   				<li>users who can't remember login</li>
   				<li>users who don't want to create account</li>
   				<li>developers who don't want to support accounts</li>
   			</ul>
+        <section>
+          <h4>Forgotten Passwords</h4>
+          <p>
+            Users frequently forget their passwords, especially when their form is restricted based on length or types of characters that they contain. Sending a URL to users who forget their passwords is preferable to sending a password because:
+          </p>
+          <ul>
+            <li>sending a password would require the website to store the password in plain text, which is a bad security practice</li>
+            <li>the capability URL can be disabled after it has been accessed, which means that even if the email or URL is shared later on, it doesn't provide ongoing access to the account</li>
+            <li>the capability URL can resolve to a page that forces the user to reset their password; if users were simply presented with a password or granted access to the entire system with the URL then they might not remember to reset their password</li>
+          </ul>
+        </section>
+        <section>
+          <h4>Low Friction Accounts</h4>
+          <p>
+            There are a proliferation of web-based services which provide for user accounts, to help record user preferences and history. Creating another user account can become a high burden for users, particularly when they don't expect to use the account very frequently.
+          </p>
+          <p>
+            Web-based applications that do not require user information in order to function may enable users to access the service without creating an account, or only prompt the user to create an account after they have used the service for a while.
+          </p>
+          <p>
+            Using capability URLs is beneficial to the more regular users of a web-based application because it enables them to collaborate with other people who are not regular users of the service. Regular users can create a resource and share a URL for that resource with their potential collaborators through another route (eg through email).
+          </p>
+          <p>
+            Capability URLs that are used to facilitate collaboration without requiring accounts are generally controlled by a regular user, who might wish to:
+          </p>
+          <ul>
+            <li>create different capability URLs for different people or groups that they wish to collaborate with</li>
+            <li>create different capability URLs for different types of action that they wish to permit on a resource (eg editing or commenting or viewing)</li>
+            <li>be able to revoke permissions for given capability URLs if they learn they have been shared outside the intended group</li>
+          </ul>
+        </section>
+        <section>
+          <h4>Websites without Accounts</h4>
+          <p>
+            Account management is seldom the main goal of a web-based application. Although it can be relatively easy to plug in account management, there is an overhead involved: it can raise security concerns, and has legal implications because it  involves storing personal data.
+          </p>
+          <p>
+            In some applications there is no risk of someone else deleting important work belonging to another user. This might be because the web application is not used to do important work. Or it might be that the application does not support destructive acts.
+          </p>
+          <p>
+            In these cases, it may be that the developer of a web application chooses to use capability URLs rather than supporting user accounts, letting them focus on the main purpose of the application rather than account management.
+          </p>
+        </section>
   		</section>
   		
   		<section>
   			<h3>Easy Onward Sharing</h3>
-  			<ul>
-  				<li>invite just one person in organisation</li>
-  				<li>trust they will pass on URL to the rest</li>
-  				<li>reduced administration</li>
-  			</ul>
+        <p>
+          A second set of reasons for supporting capability URLs is that it enables those with whom access is originally shared to continue to share that access with their own network.
+        </p>
+        <p>
+          For example, if a user is trying to arrange a meeting between organisations, they might not know all the people who should attend the meeting from other organisations. Under a normal account-based method, the user would typically have to gather the information about who should attend the meeting before granting each of those individuals access to the system. With a capability URL, they only have to share the URL with a representative from each organisation, and trust that representative to pass on the URL to whichever colleagues need to take part.
+        </p>
+        <p>
+          Capability URLs can thus enable permissions to flow through networks more easily than they can with an account-based system.
+        </p>
   		</section>
   		
   		<section>
   			<h3>Easy Client API</h3>
+        <p>
+          Authentication can be burdensome in HTTP APIs because HTTP is a stateless protocol and requires authentication tokens to be passed and processed on each transaction. This takes up both bandwidth and processing power, which can be a significant overhead for frequent, small, messages.
+        </p>
+        <p>
+          Capability URLs can be used instead. Clients:
+        </p>
   			<ol>
-  				<li>perform authentication</li>
-  				<li>request list of capability URLs</li>
+  				<li>perform authentication as normal</li>
+  				<li>request a list of capability URLs to use for the rest of the session</li>
   				<li>use those URLs without authentication</li>
   			</ol>
+        <p>
+          This removes the authentication cost on each transaction while keeping the exchanges fairly secure.
+        </p>
+        <p class="note">
+          There are larger issues here about using HTTP for frequent, small, messages. Arguably, HTTP isn't an appropriate protocol in these circumstances, or other workarounds such as long polling or pipelined requests would work better.
+        </p>
   		</section>
   	</section>
   	
