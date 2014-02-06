@@ -56,7 +56,7 @@ var respecConfig = {
     </section>
     <section id="sotd">
       <p>
-        This is an unofficial draft and work in progress. It has no official standing and is currently only a sketch of an eventual Working Draft.
+        This is a proposed Working Draft, towards a TAG Finding.
       </p>
     </section>
     <section id="intro">
@@ -78,7 +78,7 @@ var respecConfig = {
   	<section id="examples">
     	<h2>Example Capability URLs</h2>
       <p>
-        Capability URLs are in widespread usage. This section contains examples from the web where capability URLs are used.
+        Capability URLs are in widespread use. This section contains examples from the web where capability URLs are used.
       </p>
   		<section>
   			<h2>Password Resets</h2>
@@ -166,6 +166,23 @@ var respecConfig = {
           <figcaption>Doodle page for a new poll</figcaption>
         </figure>
   		</section>
+      <section>
+        <h2>Flickr images</h2>
+        <p>
+          Private images on Flickr can be shared through Guest Passes which are generated for a given image on demand.
+        </p>
+        <figure>
+          <img src="flickr-guest-pass.png" alt="Flickr dialog saying 'Grab the link' for a Guest Pass and inviting the user to visit the Guess Pass History." />
+          <figcaption>Flickr dialog for a new Guest Pass</figcaption>
+        </figure>
+        <p>
+          Users can view the Guest Pass History which provides the option of expiring the current Guest Pass for the image.
+        </p>
+        <figure>
+          <img src="flickr-guest-pass-history.png" alt="Portion of a Guest Pass History on Flickr, showing the option to Expire the Guest Pass." />
+          <figcaption>Flickr Guest Pass History</figcaption>
+        </figure>
+      </section>
   	</section>
   	<section id="advantages">
   		<h2>Reasons to Use Capabilty URLs</h2>
@@ -227,7 +244,7 @@ var respecConfig = {
         </section>
   		</section>
   		
-  		<section>
+  		<section> 
   			<h3>Easy Onward Sharing</h3>
         <p>
           A second set of reasons for supporting capability URLs is that it enables those with whom access is originally shared to continue to share that access with their own network.
@@ -276,7 +293,7 @@ var respecConfig = {
           There are more subtle routes for exposure too. If a link to another site is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories, and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
         </p>
         <p>
-          The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL.
+          The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
         </p>
         <p>
           Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
@@ -286,6 +303,13 @@ var respecConfig = {
         </p>
   		</section>
   		
+      <section>
+        <h3>Detecting Compromises</h3>
+        <p>
+          It can be hard to detect when a capability URL has been compromised, because there is nothing to distinguish legitimate access from illegitimate access. Unexpected access might be detectable by examining the IP addresses or User-Agent strings in requests for the resource, but there is little else to go on.
+        </p>
+      </section>
+
   		<section>
   			<h3>Handling Compromises</h3>
         <p>
@@ -356,37 +380,48 @@ var respecConfig = {
           If you have decided to use capability URLs, depending on the level of risk associated to the discovery of a capability URL, you should employ as many of the following security measures as possible:
         </p>
         <ul>
-          <li>Capability URLs should be <code>https</code> URLs. This does not prevent all exposure of the URL but does prevent it from being shown in plain text within the HTTP request for the URL.</li>
-          <li>Pages that inform users of capability URLs should be encrypted, by being served through HTTPS.</li>
-          <li>Capability URLs should expire. For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week.</li>
-          <li>Pages accessed through a capability URL should not include links to third-party websites, or to third-party scripts. They should not include a mechanism for others to insert such links onto the page (eg through comments). If these are allowed, the links should include <code>rel="noreferrer"</code> to prevent the <code>Referer</code> header from being set.</li>
-          <li>If capability URLs are controlled by an authenticated user, it should be possible for that user to revoke the capability URLs associated with the resource that they control. They should be able to create multiple such capability URLs so that they can revoke access through a compromised capability URL without affecting access from other capability URLs.</li>
+          <li><strong>Capability URLs should be <code>https</code> URLs.</strong> This does not prevent all exposure of the URL but does prevent it from being shown in plain text within the HTTP request for the URL.</li>
+          <li><strong>Pages that inform users of capability URLs should be encrypted, by being served through HTTPS.</strong></li>
+          <li><strong>Capability URLs should expire.</strong> For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week.</li>
+          <li><strong>Pages accessed through a capability URL should not include links to third-party websites, or to untrusted third-party scripts.</strong> They should not include a mechanism for others to insert such links onto the page (eg through comments). If these are allowed, the links should include <code>rel="noreferrer"</code> to prevent the <code>Referer</code> header from being set.</li>
+          <li>If capability URLs are controlled by an authenticated user, <strong>it should be possible for that user to revoke the capability URLs associated with the resource that they control</strong>. They should be able to create multiple such capability URLs so that they can revoke access through a compromised capability URL without affecting access from other capability URLs.</li>
+          <li><strong>The path under which capability URLs are found should be listed within <code>robots.txt</code></strong> to prevent them from being listed by those search engines that honour <code>robots.txt</code>. Do not list individual capability URLs within <code>robots.txt</code>.</li>
         </ul>
-        <p class="issue">
-          Is there something we should recommend here about encryption of emails that contain capability URLs?
-        </p>
-        <p class="issue">
-          Is any of this actually worthwhile? Given how easy it is for capability URLs to leak out even if these security measures are taken, should we just advise people to build applications that recognise the likelihood of compromise (ie only use them for one-shot access; don't use them for anything at all sensitive)?
+        <p>
+          <strong>When capability URLs are used, they should be used within an appropriate HTTP verb to enable a relevant action.</strong> For example, an HTTP <code>GET</code> on a capability URL should not result in side effects such as the deletion of a resource. Capability URLs should encode access permissions for a resource, not actions on that resource.
         </p>
         <p>
-          When capability URLs are used, they should be used within an appropriate HTTP verb to enable a relevant action. For example, an HTTP <code>GET</code> on a capability URL should not result in side effects such as the deletion of a resource. Capability URLs should encode access permissions for a resource, not actions on that resource.
+          <strong>When capability URLs expire, servers should respond to the URL with either a <code>410 Gone</code> or a <code>404 Not Found</code> response.</strong> In practice, there is little difference between these responses: a <code>410 Gone</code> response requires the application to keep track of which capability URLs have been supported in the past; although this is more work for the application, it does prevent the reassignment of that capability URL to a new resource.
         </p>
   		</section>
   		
   		<section>
   			<h3>Capability URL Design</h3>
         <p>
-          Capability URLs must be unique, but they should also avoid being guessable. For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
+          <strong>Capability URLs must be unique, but they should also avoid being guessable.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
         </p>
         <p>
           Good unique URLs include an unguessable unique identifier such as a <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>.
         </p>
   		</section>
       
+      <section>
+        <h3>UI Design Considerations</h3>
+        <p>
+          There is currently no way for built-in user interfaces, such as the location bar of a browser, to detect when a page is being accessed through a capability URL as opposed to a normal URL. 
+        </p>
+        <p>
+          To prevent the capability URL from being visible in the location bar, you can use the <code>replaceState()</code> method to replace the displayed URL with the canonical URL. However, this prevents the capability URL from being bookmarked by the user. In addition, if you do this, you should make sure the capability URL is replaced back into the history when the page is unloaded, otherwise it will not be possible for the user to navigate back to the page by navigating through their history.
+        </p>
+        <p>
+          <strong>Users who are provided with capability URLs to share with others should be informed of the consequences of those URLs being shared widely.</strong> Pages should describe what people who get the URL can do with it, and explain the ways in which these URLs can be shared safely.
+        </p>
+      </section>
+      
       <section id="canonical-urls">
         <h3>Canonical URLs</h3>
         <p>
-          As outlined in <a href="#disadvantages" class="sectionRef"></a>, in cases where there are several capability URLs that are used to provide access to the same resource, the server should have a single canonical URL for the resource. This URL may be accessible by users who have the correct access privileges (granted through an account).
+          As outlined in <a href="#disadvantages" class="sectionRef"></a>, <strong>servers should have a single canonical URL for a resource when there are several capability URLs that are used to provide access to that resource</strong>. This URL may be accessible by users who have the correct access privileges (granted through an account).
         </p>
         <p>
           Canonical URLs may be used:
@@ -403,24 +438,23 @@ var respecConfig = {
         <p>
           If content is served directly from pages accessed through capability URLs, these pages can link to the canonical URL for the resource through <code>rel="canonical"</code> either in the metadata for the page (a <code>&lt;link&gt;</code> element) or within a <code>Link</code> header on the resource.
         </p>
-        <p class="issue">
-          The definition of the <code>canonical</code> link relation is really about providing a preferred URL for search engines to use when indexing, which doesn't apply here. Other potential link relations could be <code>self</code>, <code>alternate</code>, or the undescriptive <code>related</code>. Or is it worth creating a new link relation for this, which could also be used to identify pages that are accessed by capability URLs?
-        </p>
         <p>
-          If the capability URLs refer to a resource that is later made public, they should respond with a <code>301 Moved Permanently</code> providing a redirection to the normal, public, canonical URL.
+          <strong>If the capability URLs refer to a resource that is later made public, they should respond with a <code>301 Moved Permanently</code> providing a redirection to the normal, public, canonical URL.</strong>
         </p>
       </section>
-  		
-  		<section>
-  			<h3>UI Design Considerations</h3>
-        <p>
-          There is currently no way for built-in user interfaces, such as the location bar of a browser, to detect when a page is being accessed through a capability URL as opposed to a normal URL. However, you can use the <code>replaceState()</code> method to replace the URL displayed in the location bar with the canonical URL. If you do this, you should make sure the capability URL is replaced back into the history when the page is unloaded, otherwise it will not be possible for the user to navigate back to the page by navigating through their history.
-        </p>
-        <p>
-          It is good practice to ensure that users who are provided with capability URLs to share with others are informed of the consequences of those URLs being shared widely. Pages should describe what people who get the URL can do with it, and explain the ways in which these URLs can be shared safely.
-        </p>
-  		</section>
   	</section>
   	
+    <section class="appendix">
+      <h2>Future Work</h2>
+      <p>
+        Following the above analysis, the TAG thinks that it would be useful to investigate adding a <a href="http://www.w3.org/TR/CSP/">Content Security Policy</a> directive or a separate HTTP header that indicates that the requested URL is a capability URL. A browser could then protect the URL in various ways such as:
+      </p>
+      <ul>
+        <li>obscuring the location bar</li>
+        <li>ensuring that the <code>Referer</code> header was not set</li>
+        <li>disallowing access to the page URL from any third-party scripts</li>
+        <li>hiding it within the history</li>
+      </ul>
+    </section>
   </body>
 </html>
