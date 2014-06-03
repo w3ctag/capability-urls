@@ -51,22 +51,25 @@ var respecConfig = {
   <body>
     <section id="abstract">
       <p>
-        Capability URLs grant access to a resource to anyone who has the URL. There are times when this is useful, for example one-shot password reset URLs, but overuse can be problematic as URLs cannot generally be kept secret. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications.
+        Capability URLs grant access to a resource to anyone who has the URL. There are times when this is useful, for example one-shot password reset URLs, but their use also opens up some security issues as URLs cannot generally be kept secret. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications.
       </p>
     </section>
     <section id="sotd">
       <p>
-        This is a proposed Working Draft, towards a TAG Finding.
+        This is a proposed Working Draft, which is intended to eventually be published as a TAG Finding. It does not contain any normative content (eg about implementation compliance), only advice for developers.
       </p>
     </section>
     <section id="intro">
       <h2>Introduction</h2>
     	<p>There are two broad methods of controlling access to information that is published on the web:</p>
     	<ol>
-    		<li> the server can have access control measures that require people accessing the content to provide the correct token(s) (such as a password) before the content is accessible</li>
+    		<li> the server can have access control measures that require people accessing the content to provide the correct token(s) (such as a password or cookie) before the content is accessible</li>
     		<li> the information can be published at an obscure or unguessable URL, and links to it only provided to people who have permission to access it</li>
     	</ol>
-    	<p>The URLs used in the second method are known as "capability URLs": an agent who possesses the URL is given the capability to access the information.</p>    	
+    	<p>The URLs used in the second method are known as "capability URLs": an agent who possesses the URL is given the capability to access the information.</p>
+      <p>
+        These methods of controlling access can be used in combination. For example, a session-specific token within the URL created by a form submission (a type of capability URL) helps to protect against <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site request forgery</a> where third-party pages can take advantage of the fact that a user has the necessary cookie to access a target page.
+      </p>
     	<p>This document describes:</p>
     	<ul>
     		<li>cases where capability URLs are used on the web today</li>
@@ -187,7 +190,7 @@ var respecConfig = {
   	<section id="advantages">
   		<h2>Reasons to Use Capabilty URLs</h2>
   		
-      <p>There are three rationales for using capability URLs evident in the examples described above.</p>
+      <p>There are four rationales for using capability URLs evident in the examples described above.</p>
 
   		<section>
   			<h3>No Login Required</h3>
@@ -244,6 +247,19 @@ var respecConfig = {
         </section>
   		</section>
   		
+      <section>
+        <h3>Managing Access on Sandboxed Domains</h3>
+        <p>
+          Sites that host content from untrusted users sometimes sandbox that content within separate per-user domains. This ensures that content managed by users isn't granted the privileges that are usually conferred by being on the same origin.
+        </p>
+        <p>
+          In these cases, however, access to private content on the user-specific domain cannot be controlled through copying the normal authentication cookies that the user has on the main site, because those cookies would give a route through the sandbox. Instead, <a href="http://googleonlinesecurity.blogspot.co.uk/2012/08/content-hosting-for-modern-web.html">per-document capability URLs can provide an alternative authentication mechanism</a>.
+        </p>
+        <p class="issue">
+          I don't think I understand this approach well enough to document it properly. Specifically, given that cookies are domain-specific, I don't understand why copying cookies (for the user on their own domain) isn't a reasonable approach. Or issuing alternative cookies for that domain (effectively forcing them to login twice, once on the main site and once on the user-specific subdomain). Is that just about user experience?
+        </p>
+      </section>
+
   		<section> 
   			<h3>Easy Onward Sharing</h3>
         <p>
@@ -290,7 +306,7 @@ var respecConfig = {
           In general, applications that use URLs are not designed to treat them as sensitive information. URLs appear within URL bars, from which they can be copied easily. They appear within application logs, such as within web servers and in browser history.
         </p>
         <p>
-          There are more subtle routes for exposure too. If a link to another site is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories, and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
+          There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories, and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
         </p>
         <p>
           The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
@@ -302,13 +318,6 @@ var respecConfig = {
           In short, the risk of exposure of capability URLs is very high, particularly when they are accessed through a browser.
         </p>
   		</section>
-  		
-      <section>
-        <h3>Detecting Compromises</h3>
-        <p>
-          It can be hard to detect when a capability URL has been compromised, because there is nothing to distinguish legitimate access from illegitimate access. Unexpected access might be detectable by examining the IP addresses or User-Agent strings in requests for the resource, but there is little else to go on.
-        </p>
-      </section>
 
   		<section>
   			<h3>Handling Compromises</h3>
@@ -390,6 +399,9 @@ var respecConfig = {
         <p>
           <strong>When capability URLs are used, they should be used within an appropriate HTTP verb to enable a relevant action.</strong> For example, an HTTP <code>GET</code> on a capability URL should not result in side effects such as the deletion of a resource. Capability URLs should encode access permissions for a resource, not actions on that resource.
         </p>
+        <p class="note">
+          Several of these security measures are not possible for capability URLs that are delivered by email. It's recommended that those alternative security measures (such as rapid expiry) that can be used are used in these cases.
+        </p>
         <p>
           <strong>When capability URLs expire, servers should respond to the URL with either a <code>410 Gone</code> or a <code>404 Not Found</code> response.</strong> In practice, there is little difference between these responses: a <code>410 Gone</code> response requires the application to keep track of which capability URLs have been supported in the past; although this is more work for the application, it does prevent the reassignment of that capability URL to a new resource.
         </p>
@@ -402,6 +414,9 @@ var respecConfig = {
         </p>
         <p>
           Good unique URLs include an unguessable unique identifier such as a <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>.
+        </p>
+        <p class="issue">
+          This section needs to include a better discussion of "the appropriate sources of randomness, amount of entropy, signing / expiration algorithms, etc." as pointed out in this post from <a href="http://lists.w3.org/Archives/Public/www-tag/2014Jun/0003.html">Michal Zalewski</a>.
         </p>
   		</section>
       
