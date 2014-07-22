@@ -317,7 +317,7 @@ var respecConfig = {
           In general, applications that use URLs are not designed to treat them as sensitive information. URLs appear within URL bars, from which they can be copied easily. They appear within application logs, such as within web servers and in browser history.
         </p>
         <p>
-          There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories, and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
+          There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header (unless the crucial key is included in a fragment identifier). Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories, and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
         </p>
         <p>
           The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
@@ -326,7 +326,7 @@ var respecConfig = {
           Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
         </p>
         <p>
-          In short, the risk of exposure of capability URLs is very high, particularly when they are accessed through a browser.
+          In short, the risk of exposure of capability URLs is quite high, particularly when they are accessed through a browser.
         </p>
   		</section>
 
@@ -404,6 +404,7 @@ var respecConfig = {
           <li><strong>Pages that inform users of capability URLs should be encrypted, by being served through HTTPS.</strong></li>
           <li><strong>Capability URLs should expire.</strong> For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week.</li>
           <li><strong>Pages accessed through a capability URL should not include links to third-party websites, or to untrusted third-party scripts</strong>, unless the URLs use fragment identifiers for the capability. They should not include a mechanism for others to insert such links onto the page (eg through comments). If these are allowed, the links should include <code>rel="noreferrer"</code> to prevent the <code>Referer</code> header from being set.</li>
+          <li><strong>The <a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-referrer"><code>referrer</code> directive within the Content Security Policy</a> for pages accessed through a capability URL should be set to <code>none</code>, <code>origin</code> or <code>origin-when-cross-origin</code></strong> to prevent the leakage of capability URLs through the <code>Referer</code> header.</li>
           <li>If capability URLs are controlled by an authenticated user, <strong>it should be possible for that user to revoke the capability URLs associated with the resource that they control</strong>. They should be able to create multiple such capability URLs so that they can revoke access through a compromised capability URL without affecting access from other capability URLs.</li>
           <li><strong>The path under which capability URLs are found should be listed within <code>robots.txt</code></strong> to prevent them from being listed by those search engines that honour <code>robots.txt</code>. Do not list individual capability URLs within <code>robots.txt</code>.</li>
         </ul>
