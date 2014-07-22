@@ -186,6 +186,17 @@ var respecConfig = {
           <figcaption>Flickr Guest Pass History</figcaption>
         </figure>
       </section>
+      <section>
+        <h2>Tahoe-LAFS</h2>
+        <p>
+          Tahoe-LAFS provides a open cloud storage system that uses <a href="https://tahoe-lafs.org/trac/tahoe-lafs/browser/trunk/docs/frontends/webapi.rst">capability-based HTTP servers</a> to manage access to files. For example, a URL such as:
+        </p>
+        <pre>
+<a href="https://zooko.com/uri/URI:DIR2-MDMF-RO:dwvqalbdt4ax4vgupcewxljg3u:bej7hhojmpuugy77oyydmazf6uu7huiipkctih7adky7e6txavnq/klog.html">https://zooko.com/uri/URI:DIR2-MDMF-RO:dwvqalbdt4ax4vgupcewxljg3u:bej7hhojmpuugy77oyydmazf6uu7huiipkctih7adky7e6txavnq/klog.html</a></pre>
+        <p>
+          provides read-only access to a file stored within Tahoe. The <a href="https://tahoe-lafs.org/trac/tahoe-lafs/browser/trunk/docs/frontends/webapi.rst">full REST API documentation</a> describes how capabilities such as <code>URI:DIR2:djrdkfawoqihigoett4g6auz6a:jx5mplfpwexnoqff7y5e4zjus4lidm76dcuarpct7cckorh2dpgq</code> are used within URLs and with different HTTP verbs. It  distinguishes between file capabilities and directory capabilities, and between read-write, read-only and verify-only capabilities.
+        </p>
+      </section>
   	</section>
   	<section id="advantages">
   		<h2>Reasons to Use Capabilty URLs</h2>
