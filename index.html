@@ -402,17 +402,18 @@ var respecConfig = {
         <ul>
           <li><strong>Capability URLs should be <code>https</code> URLs.</strong> This does not prevent all exposure of the URL but does prevent it from being shown in plain text within the HTTP request for the URL.</li>
           <li><strong>Pages that inform users of capability URLs should be encrypted, by being served through HTTPS.</strong></li>
-          <li><strong>Capability URLs should expire.</strong> For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week.</li>
+          <li><strong>Capability URLs should expire.</strong> For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week. Password reset links should expire after the password has been successfully changed, or when the email address on the account changes.</li>
           <li><strong>Pages accessed through a capability URL should not include links to third-party websites, or to untrusted third-party scripts</strong>, unless the URLs use fragment identifiers for the capability. They should not include a mechanism for others to insert such links onto the page (eg through comments). If these are allowed, the links should include <code>rel="noreferrer"</code> to prevent the <code>Referer</code> header from being set.</li>
-          <li><strong>The <a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-referrer"><code>referrer</code> directive within the Content Security Policy</a> for pages accessed through a capability URL should be set to <code>none</code>, <code>origin</code> or <code>origin-when-cross-origin</code></strong> to prevent the leakage of capability URLs through the <code>Referer</code> header.</li>
+          <li><strong>The <a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-referrer"><code>referrer</code> directive within the Content Security Policy</a> for pages accessed through a capability URL should be set to <code>none</code>, <code>origin</code> or <code>origin-when-cross-origin</code></strong> to prevent the leakage of capability URLs through the <code>Referer</code> header. This can be done using the <code>Content-Security-Policy</code> HTTP header or through including a <code>meta</code> element with <code>name="referrer"</code> and the <code>value</code> attribute set to one of the values listed.</li>
           <li>If capability URLs are controlled by an authenticated user, <strong>it should be possible for that user to revoke the capability URLs associated with the resource that they control</strong>. They should be able to create multiple such capability URLs so that they can revoke access through a compromised capability URL without affecting access from other capability URLs.</li>
           <li><strong>The path under which capability URLs are found should be listed within <code>robots.txt</code></strong> to prevent them from being listed by those search engines that honour <code>robots.txt</code>. Do not list individual capability URLs within <code>robots.txt</code>.</li>
+          <li><strong>Access to the URL space in which capability URLs reside should be rate limited.</strong> This helps avoid attacks that attempt to identify capability URLs by enumerating the possible URLs.
         </ul>
         <p>
           <strong>When capability URLs are used, they should be used within an appropriate HTTP verb to enable a relevant action.</strong> For example, an HTTP <code>GET</code> on a capability URL should not result in side effects such as the deletion of a resource. Capability URLs should encode access permissions for a resource, not actions on that resource.
         </p>
         <p class="note">
-          Several of these security measures are not possible for capability URLs that are delivered by email. It's recommended that those alternative security measures (such as rapid expiry) that can be used are used in these cases.
+          Several of these security measures are not possible or inconvenient for capability URLs that are delivered by email. For example, URLs in email can only be accessed through a <code>GET</code> request. It's recommended that those alternative security measures (such as rapid expiry) that can be used are used in these cases.
         </p>
         <p>
           <strong>When capability URLs expire, servers should respond to the URL with either a <code>410 Gone</code> or a <code>404 Not Found</code> response.</strong> In practice, there is little difference between these responses: a <code>410 Gone</code> response requires the application to keep track of which capability URLs have been supported in the past; although this is more work for the application, it does prevent the reassignment of that capability URL to a new resource.
@@ -425,7 +426,10 @@ var respecConfig = {
           <strong>Capability URLs must be unique, but they should also avoid being guessable.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
         </p>
         <p>
-          Good unique URLs include an unguessable unique identifier such as a <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a>. There are also advantages to making them short, human readable and case-insensitive, to make it easier for them to be read out and robust against mis-typing.
+          Good unique URLs include an unguessable unique identifier created through a secure random number generator. If a hash function is used to create the capability URL, for example a hash over a user name for a password reset, these should use an <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> or other algorithm that is not vulnerable to <a href="https://en.wikipedia.org/wiki/Length_extension_attack">length extension attacks</a>.
+        </p>
+        <p>
+          There are advantages to making capability URLs short, human readable and case-insensitive, to make it easier for them to be read out and robust against mis-typing, but you should avoid passing capability URLs through URL shorteners that have lower protections against enumeration than the original capability URL.
         </p>
         <p>
           Designing capability URLs to include the permission key in a fragment rather than in the main URL avoids some of the leakage possibilities associated with the <code>Referer</code> header. This is recommended in the <a href="http://waterken.sourceforge.net/web-key/">web-key proposal</a>. Note however that third-party scripts embedded within pages do have access to full URLs, including the fragment.
@@ -463,9 +467,6 @@ var respecConfig = {
           <li>as a common URL that can be used by anyone in annotations about the resource</li>
         </ul>
         <p>
-          One possible application pattern is for capability URLs to redirect (with a <code>302 Found</code>) to the canonical URL and for the server to use the <code>Referer</code> header, set through the redirect, to determine the level of access granted to the user. This has the advantage of not exposing the capability URL within the browser bar or within the server logs of linked to servers. However, browsers may be set to not expose the <code>Referer</code> header (for security reasons) in which case this method will not work.
-        </p>
-        <p>
           If content is served directly from pages accessed through capability URLs, these pages can link to the canonical URL for the resource through <code>rel="canonical"</code> either in the metadata for the page (a <code>&lt;link&gt;</code> element) or within a <code>Link</code> header on the resource.
         </p>
         <p>
@@ -477,13 +478,23 @@ var respecConfig = {
     <section class="appendix">
       <h2>Future Work</h2>
       <p>
-        Following the above analysis, the TAG thinks that it would be useful to investigate adding a <a href="http://www.w3.org/TR/CSP/">Content Security Policy</a> directive or a separate HTTP header that indicates that the requested URL is a capability URL. A browser could then protect the URL in various ways such as:
+        Following the above analysis, the TAG thinks that it would be useful to investigate adding a mechanism to indicate that a particular URL is a capability URL. Possible methods for this include:
+      </p>
+      <ul>
+        <li>a <a href="http://www.w3.org/TR/CSP/">Content Security Policy</a> directive</li>
+        <li>an HTTP header in responses to a request</li>
+        <li>a link relation on links to the capability URLs (particularly within email messages)</li>
+        <li>a recognised string within URLs</li>
+      </ul>
+      <p>
+        A browser or email client could then protect the URL in various ways such as:
       </p>
       <ul>
         <li>obscuring the location bar</li>
         <li>ensuring that the <code>Referer</code> header was not set</li>
         <li>disallowing access to the page URL from any third-party scripts</li>
         <li>hiding it within the history</li>
+        <li>sequestering access if there's suspicion that an account has been compromised</li>
       </ul>
     </section>
   </body>
