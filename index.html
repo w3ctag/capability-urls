@@ -330,6 +330,9 @@ var respecConfig = {
           In browsers where the URL bar also provides access to search, a copied capability URL can be mistakenly be passed through to a search engine, if the browser doesn't recognise that it is a URL (for example because of accidentally added whitespace).
         </p>
         <p>
+          Several browsers detect phishing by sending URLs that are accessed through them back to a central server. As there is no way for a browser to know that a particular URL is a capability URL, these are also sent back to a central server controlled by the browser vendor.
+        </p>
+        <p>
           Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
         </p>
         <p>
@@ -459,7 +462,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
           There are advantages to making capability URLs short, human readable and case-insensitive, to make it easier for them to be read out, for applications in which delegation is important, and robust against mis-typing. However, capability URLs should not be passed through URL shorteners that have lower protections against enumeration than the original capability URL.
         </p>
         <p>
-          Designing capability URLs to include the secret key in a fragment rather than in the main URL avoids some of the leakage possibilities associated with the <code>Referer</code> header. This is recommended in the <a href="http://waterken.sourceforge.net/web-key/">web-key proposal</a>. Note however that third-party scripts embedded within pages do have access to full URLs, including the fragment.
+          Designing capability URLs to include the secret key in a fragment rather than in the main URL avoids some of the leakage possibilities associated with the <code>Referer</code> header. This is recommended in the <a href="http://waterken.sourceforge.net/web-key/">web-key proposal</a>. Note however that third-party scripts embedded within pages do have access to full URLs, including the fragment. In addition, this design means that fragment identifiers cannot be used in the normal way for web pages, namely to identify a fragment within the page.
         </p>
   		</section>
       
