@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <title>
+      Good Practices for Capability URLs
+    </title>
+    
+    
+    <style>/* --- EXAMPLES --- */
+div.example-title {
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.example-title span {
+    text-transform: uppercase;   
+}
+aside.example, div.example, div.illegal-example {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+div.illegal-example { color: red }
+div.illegal-example p { color: black }
+aside.example, div.example {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;    
+}
+
+aside.example div.example {
+    border-left-width: .1em;
+    border-color: #999;
+    background: #fff;
+}
+aside.example div.example div.example-title {
+    color: #999;
+}
+</style><style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title { color: #2b2; }
+div.issue-title span, div.note-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .issue > p:first-child { margin-top: 0 }
+.issue, .note {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note {
+    padding: 1em 1.2em 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.issue { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+
+</style><link href="editorial.css" rel="stylesheet" type="text/css">
+  <style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><link href="https://www.w3.org/StyleSheets/TR/W3C-ED" rel="stylesheet"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+  <body id="respecDocument" role="document" class="h-entry"><div id="respecHeader" role="contentinfo" class="head">
+  <p>
+    
+      <a href="http://www.w3.org/"><img src="https://www.w3.org/Icons/w3c_home" alt="W3C" height="48" width="72"></a>
+    
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Good Practices for Capability URLs</h1>
+  
+  <h2 id="w3c-editor-s-draft-23-july-2014" property="dcterms:issued" datatype="xsd:dateTime" content="2014-07-23T15:01:12.000Z"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-07-23">23 July 2014</time></h2>
+  <dl>
+    
+      <dt>This version:</dt>
+      <dd><a class="u-url" href="http://w3ctag.github.io/capability-urls/">http://w3ctag.github.io/capability-urls/</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR/capability-urls/">http://www.w3.org/TR/capability-urls/</a></dd>
+    
+    
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="http://w3ctag.github.io/capability-urls/">http://w3ctag.github.io/capability-urls/</a></dd>
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    <dt>Editor:</dt>
+    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jeni Tennison</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.theodi.org/">ODI</a></span>
+</dd>
+
+    
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3ctag/capability-urls">
+                      We are on Github.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3ctag/capability-urls/issues">
+                      File a bug.
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3ctag/capability-urls/commits/gh-pages">
+                      Commit history.
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+    
+  </dl>
+  
+  
+  
+  
+    
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2014
+        
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
+      </p>
+    
+  
+  <hr>
+</div>
+    <section rel="bibo:Chapter" resource="#abstract" typeof="bibo:Chapter" datatype="" property="dcterms:abstract" class="introductory" id="abstract"><h2 id="h2_abstract" role="heading" aria-level="1">Abstract</h2>
+      <p>
+        Capability URLs grant access to a resource to anyone who has the URL. There are particular application design patterns for which this is useful as they remove the necessity for users to log in to a site and are easily delegated to others. But their use can open up some security issues. URLs are not generally be kept secret, and there are various routes through which capability URLs can leak into unintended hands. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications, to minimise these risks.
+      </p>
+    </section><section rel="bibo:Chapter" resource="#sotd" typeof="bibo:Chapter" id="sotd" class="introductory"><h2 id="h2_sotd" role="heading" aria-level="1">Status of This Document</h2>
+  
+    
+      
+        <p>
+          <em>This section describes the status of this document at the time of its publication.
+          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
+          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+          http://www.w3.org/TR/.</em>
+        </p>
+        
+      <p>
+        This is a proposed Working Draft, which is intended to eventually be published as a TAG Finding. It does not contain any normative content (eg about implementation compliance), only advice for developers.
+      </p>
+    
+        <p>
+          This document was published by the <a href="http://www.w3.org/2001/tag/">Technical Architecture Group</a> as an Editor's Draft.
+          
+          
+            If you wish to make comments regarding this document, please send them to 
+            <a href="mailto:www-tag@w3.org">www-tag@w3.org</a> 
+            (<a href="mailto:www-tag-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="http://lists.w3.org/Archives/Public/www-tag/">archives</a>).
+          
+          
+          
+          
+            All comments are welcome.
+          
+        </p>
+        
+        
+          <p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p>
+        
+        
+        
+        <p>
+          
+            This document was produced by a group operating under the 
+            <a id="sotd_patent" about="" rel="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+            Policy</a>.
+          
+          
+          
+            
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2001/tag/disclosures" rel="disclosure">public list of any patent
+              disclosures</a> 
+            
+            made in connection with the deliverables of the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p>
+        
+      
+    
+  
+</section><section id="toc"><h2 id="h2_toc" role="heading" aria-level="1" class="introductory">Table of Contents</h2><ul id="respecContents" role="directory" class="toc"><li class="tocline"><a class="tocxref" href="#intro"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a class="tocxref" href="#examples"><span class="secno">2. </span>Example Capability URLs</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#password-resets"><span class="secno">2.1 </span>Password Resets</a></li><li class="tocline"><a class="tocxref" href="#second-life"><span class="secno">2.2 </span>Second Life</a></li><li class="tocline"><a class="tocxref" href="#google-calendar"><span class="secno">2.3 </span>Google Calendar</a></li><li class="tocline"><a class="tocxref" href="#github-gists"><span class="secno">2.4 </span>Github Gists</a></li><li class="tocline"><a class="tocxref" href="#doodle-polls"><span class="secno">2.5 </span>Doodle polls</a></li><li class="tocline"><a class="tocxref" href="#flickr-images"><span class="secno">2.6 </span>Flickr images</a></li><li class="tocline"><a class="tocxref" href="#tahoe-lafs"><span class="secno">2.7 </span>Tahoe-LAFS</a></li></ul></li><li class="tocline"><a class="tocxref" href="#advantages"><span class="secno">3. </span>Reasons to Use Capabilty URLs</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#no-login-required"><span class="secno">3.1 </span>No Login Required</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#forgotten-passwords"><span class="secno">3.1.1 </span>Forgotten Passwords</a></li><li class="tocline"><a class="tocxref" href="#low-friction-accounts"><span class="secno">3.1.2 </span>Low Friction Accounts</a></li><li class="tocline"><a class="tocxref" href="#websites-without-accounts"><span class="secno">3.1.3 </span>Websites without Accounts</a></li></ul></li><li class="tocline"><a class="tocxref" href="#managing-access-on-sandboxed-domains"><span class="secno">3.2 </span>Managing Access on Sandboxed Domains</a></li><li class="tocline"><a class="tocxref" href="#easy-delegation"><span class="secno">3.3 </span>Easy Delegation</a></li><li class="tocline"><a class="tocxref" href="#easy-client-api"><span class="secno">3.4 </span>Easy Client API</a></li></ul></li><li class="tocline"><a class="tocxref" href="#disadvantages"><span class="secno">4. </span>Potential Issues</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#risk-of-exposure"><span class="secno">4.1 </span>Risk of Exposure</a></li><li class="tocline"><a class="tocxref" href="#handling-compromises"><span class="secno">4.2 </span>Handling Compromises</a></li><li class="tocline"><a class="tocxref" href="#web-architecture"><span class="secno">4.3 </span>Web Architecture</a></li><li class="tocline"><a class="tocxref" href="#beyond-the-single-page"><span class="secno">4.4 </span>Beyond the Single Page</a></li></ul></li><li class="tocline"><a class="tocxref" href="#recommendations"><span class="secno">5. </span>Recommendations</a><ul class="toc"><li class="tocline"><a class="tocxref" href="#application-design"><span class="secno">5.1 </span>Application Design</a></li><li class="tocline"><a class="tocxref" href="#capability-url-design"><span class="secno">5.2 </span>Capability URL Design</a></li><li class="tocline"><a class="tocxref" href="#ui-design-considerations"><span class="secno">5.3 </span>UI Design Considerations</a></li><li class="tocline"><a class="tocxref" href="#canonical-urls"><span class="secno">5.4 </span>Canonical URLs</a></li></ul></li><li class="tocline"><a class="tocxref" href="#future-work"><span class="secno">A. </span>Future Work</a></li></ul></section>
+    
+    <section rel="bibo:Chapter" resource="#intro" typeof="bibo:Chapter" id="intro">
+      <!--OddPage--><h2 id="h2_intro" role="heading" aria-level="1"><span class="secno">1. </span>Introduction</h2>
+    	<p>There are two broad methods of controlling access to information that is published on the web:</p>
+    	<ol>
+    		<li> the server can have access control measures that require people accessing the content to provide the correct token(s) (such as a password or cookie) before the content is accessible</li>
+    		<li> the information can be published at an obscure or unguessable URL, and links to it only provided to people who have permission to access it</li>
+    	</ol>
+    	<p>
+        The URLs used in the second method are known as <dfn id="dfn-capability-urls">capability URLs</dfn>: an agent who possesses the URL is given the capability to access the information.
+      </p>
+      <p>
+        These methods of controlling access can be used in combination. For example, a session-specific token within the URL created by a form submission (a type of capability URL) helps to protect against <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site request forgery</a> where third-party pages can take advantage of the fact that a user has the necessary cookie to access a target page.
+      </p>
+    	<p>This document describes:</p>
+    	<ul>
+    		<li>examples where capability URLs are used on the web today</li>
+    		<li>advantages and disadvantages of using capability URLs to control access to content</li>
+    		<li>design considerations when creating websites that use capability URLs</li>
+    		<li>areas of technical development to support the use of capability URLs</li>
+    	</ul>
+    </section>
+  	<section rel="bibo:Chapter" resource="#examples" typeof="bibo:Chapter" id="examples">
+    	<!--OddPage--><h2 id="h2_examples" role="heading" aria-level="1"><span class="secno">2. </span>Example Capability URLs</h2>
+      <p>
+        Capability URLs are in widespread use. This section contains examples from the web where capability URLs are used.
+      </p>
+  		<section id="password-resets">
+  			<h3 id="h3_password-resets" role="heading" aria-level="2"><span class="secno">2.1 </span>Password Resets</h3>
+  			<p>
+  				When a user forgets their password to access a site, the site cannot simply tell them what their password is as this would require the site to store and transmit their password as plain text, which is extremely insecure.
+        </p>
+        <p>
+          The pattern that is usually used instead is that the user is sent an email that contains a link that provides the user who has received that link with enough permissions to reset their password. This example is from Dropbox:
+  			</p>
+  			<div class="example"><div class="example-title"><span>Example 1</span></div><pre class="example">Your Dropbox password recently expired. You can reset it <a href="https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset">here</a>.</pre></div>
+  			<p>In this case the capability URL is <code>https://www.dropbox.com/l/Q8eJH22ft0ckDJDeff1Do10/password_reset</code>. Anyone accessing this link (before it expires) is able to change the password for the user with whom the capability URL is associated.</p>
+  		</section>
+  		
+  		<section id="second-life">
+  			<h3 id="h3_second-life" role="heading" aria-level="2"><span class="secno">2.2 </span>Second Life</h3>
+        <figure id="fig-using-capability-urls-linden-lab-official-registration-api">
+          <blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Reg API capabilities represent permissions to perform certain actions.</blockquote>
+          <figcaption>Fig. <span class="figno">1</span> <span class="fig-title"><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Using capability URLs</a> – Linden Lab Official:Registration API</span></figcaption>
+        </figure>
+        <p>
+          Within the Second Life API, user agents aren't required to provide credentials with each action that they wish to take. Instead, they submit a single form with a username and password and the response contains a set of capability URLs for different capabilities. For example:
+        </p>
+        <div class="example"><div class="example-title"><span>Example 2</span></div><pre class="example">&lt;llsd&gt;
+  &lt;map&gt;
+    &lt;key&gt;create_user&lt;/key&gt;
+    &lt;string&gt;https://cap.secondlife.com/cap/0/35ff3b8c-a30d-4d18-b29a-e3f7f6c79cb6&lt;/string&gt;
+ 
+    &lt;key&gt;check_name&lt;/key&gt;
+    &lt;string&gt;https://cap.secondlife.com/cap/0/6e528ba1-a8b0-4f6b-8b56-362ee6f5cef8&lt;/string&gt;
+ 
+    &lt;key&gt;get_last_names&lt;/key&gt;
+    &lt;string&gt;https://cap.secondlife.com/cap/0/be4e4d2e-c00a-46cd-bb8d-d17cb8e92c9b&lt;/string&gt;
+ 
+    &lt;key&gt;get_error_codes&lt;/key&gt;
+    &lt;string&gt;https://cap.secondlife.com/cap/0/e75f81a5-b7da-4480-8f95-b1cf9d2d680f&lt;/string&gt;
+  &lt;/map&gt;
+&lt;/llsd&gt;</pre></div>
+  			<p>
+  				The documentation provides two guidelines for using these capability URLs:
+  			</p>
+        <figure id="fig-using-capability-urls-linden-lab-official-registration-api-1">
+    			<blockquote cite="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">
+            <ul>
+              <li>Do not hard-code your capabilities URLs. Either code your capabilities URLs as constants, or better yet, obtain them at run-time. Capability URLs will expire eventually, so fresh ones are always better.</li>
+              <li>Keep your capability URLs secret! The capabilities granted to you are only meant for you. A capability URL is sensitive much like a password. Moreover, Linden Lab tracks the use of each capability.</li>
+            </ul>
+          </blockquote>
+          <figcaption>Fig. <span class="figno">2</span> <span class="fig-title"><a href="http://wiki.secondlife.com/wiki/Linden_Lab_Official:Registration_API#Using_capability_URLs">Using capability URLs</a> – Linden Lab Official:Registration API</span></figcaption>
+        </figure>
+  		</section>  		
+      <section id="google-calendar">
+        <h3 id="h3_google-calendar" role="heading" aria-level="2"><span class="secno">2.3 </span>Google Calendar</h3>
+        <p>
+          Google Calendar provides Private Addresses for XML and iCalendar formats of a calendar. These can be used by anyone within a feed reader or a calendar programme to provide access to the calendar, but users are warned "Your calendar's Private Address was designed for your use only, so be sure not to share this address with others." (from <a href="https://support.google.com/calendar/answer/37106?hl=en&amp;ref_topic=1672529">About the 'Private Address'</a>).
+        </p>
+        <p>
+          The help associated with Private Addresses similarly warns against sharing the URLs with others:
+        </p>
+        <figure id="fig-help-associated-with-private-address-in-google-calendar">
+          <img src="gcal.png" alt="Help box reading 'Your calendar's Private Address is designed for your use only. All of your calendar information is available via your private links, so don't share this address with others. To change your Private Address and disable any previous access, click the Reset Private URLs link.'">
+          <figcaption>Fig. <span class="figno">3</span> <span class="fig-title">Help associated with Private Address in Google Calendar</span></figcaption>
+        </figure>
+      </section>
+  		<section id="github-gists">
+  			<h3 id="h3_github-gists" role="heading" aria-level="2"><span class="secno">2.4 </span>Github Gists</h3>
+        <p>
+          GitHub Gists support sharing and discussing versioned code and other files with other people. These can be created anonymously, and can be kept private. Access to private Gists is provided simply through sharing the URL for the Gist.
+        </p>
+        <figure id="fig-a-secret-github-gist">
+          <img src="gist.png" alt="Gist page with a pop-up explaining 'Secret gists are hidden from search engines but visible to anyone you give the URL.'">
+          <figcaption>Fig. <span class="figno">4</span> <span class="fig-title">A secret GitHub Gist</span></figcaption>
+        </figure>
+  		</section>
+  		<section id="doodle-polls">
+  			<h3 id="h3_doodle-polls" role="heading" aria-level="2"><span class="secno">2.5 </span>Doodle polls</h3>
+        <p>
+          Doodle enables users to create polls that can be accessed through URLs without users logging in. The URLs are provided to the administrator of the poll within the browser and through email. For example:
+        </p>
+        <figure id="fig-doodle-page-for-a-new-poll">
+          <img src="doodle.png" alt="Doodle page providing URLs with a Participation link saying 'Send this link to anyone you wish to invite.' and an Administration link saying 'Access this link to change, close or delete this poll.'">
+          <figcaption>Fig. <span class="figno">5</span> <span class="fig-title">Doodle page for a new poll</span></figcaption>
+        </figure>
+  		</section>
+      <section id="flickr-images">
+        <h3 id="h3_flickr-images" role="heading" aria-level="2"><span class="secno">2.6 </span>Flickr images</h3>
+        <p>
+          Private images on Flickr can be shared through Guest Passes which are generated for a given image on demand.
+        </p>
+        <figure id="fig-flickr-dialog-for-a-new-guest-pass">
+          <img src="flickr-guest-pass.png" alt="Flickr dialog saying 'Grab the link' for a Guest Pass and inviting the user to visit the Guess Pass History.">
+          <figcaption>Fig. <span class="figno">6</span> <span class="fig-title">Flickr dialog for a new Guest Pass</span></figcaption>
+        </figure>
+        <p>
+          Users can view the Guest Pass History which provides the option of expiring the current Guest Pass for the image.
+        </p>
+        <figure id="fig-flickr-guest-pass-history">
+          <img src="flickr-guest-pass-history.png" alt="Portion of a Guest Pass History on Flickr, showing the option to Expire the Guest Pass.">
+          <figcaption>Fig. <span class="figno">7</span> <span class="fig-title">Flickr Guest Pass History</span></figcaption>
+        </figure>
+      </section>
+      <section id="tahoe-lafs">
+        <h3 id="h3_tahoe-lafs" role="heading" aria-level="2"><span class="secno">2.7 </span>Tahoe-LAFS</h3>
+        <p>
+          Tahoe-LAFS provides a open cloud storage system that uses <a href="https://tahoe-lafs.org/trac/tahoe-lafs/browser/trunk/docs/frontends/webapi.rst">capability-based HTTP servers</a> to manage access to files. For example, a URL such as:
+        </p>
+        <pre><a href="https://zooko.com/uri/URI:DIR2-MDMF-RO:dwvqalbdt4ax4vgupcewxljg3u:bej7hhojmpuugy77oyydmazf6uu7huiipkctih7adky7e6txavnq/klog.html">https://zooko.com/uri/URI:DIR2-MDMF-RO:dwvqalbdt4ax4vgupcewxljg3u:bej7hhojmpuugy77oyydmazf6uu7huiipkctih7adky7e6txavnq/klog.html</a></pre>
+        <p>
+          provides read-only access to a file stored within Tahoe. The <a href="https://tahoe-lafs.org/trac/tahoe-lafs/browser/trunk/docs/frontends/webapi.rst">full REST API documentation</a> describes how capabilities such as <code>URI:DIR2:djrdkfawoqihigoett4g6auz6a:jx5mplfpwexnoqff7y5e4zjus4lidm76dcuarpct7cckorh2dpgq</code> are used within URLs and with different HTTP verbs. It  distinguishes between file capabilities and directory capabilities, and between read-write, read-only and verify-only capabilities.
+        </p>
+      </section>
+  	</section>
+  	<section rel="bibo:Chapter" resource="#advantages" typeof="bibo:Chapter" id="advantages">
+  		<!--OddPage--><h2 id="h2_advantages" role="heading" aria-level="1"><span class="secno">3. </span>Reasons to Use Capabilty URLs</h2>
+  		
+      <p>
+        There are four rationales for using capability URLs evident in the examples described above.
+      </p>
+
+  		<section id="no-login-required">
+  			<h3 id="h3_no-login-required" role="heading" aria-level="2"><span class="secno">3.1 </span>No Login Required</h3>
+        <p>
+          A capability URL enables a user to access a service without having a login or password on that service. There are three situations where that is a particular advantage:
+        </p>
+  			<ul>
+  				<li>users who can't remember login details</li>
+  				<li>users who don't want to create accounts</li>
+  				<li>developers who don't want to support accounts</li>
+  			</ul>
+        <section id="forgotten-passwords">
+          <h4 id="h4_forgotten-passwords" role="heading" aria-level="3"><span class="secno">3.1.1 </span>Forgotten Passwords</h4>
+          <p>
+            Users frequently forget their passwords, especially when their form is restricted based on length or types of characters that they contain. Sending a URL to users who forget their passwords is preferable to sending a password because:
+          </p>
+          <ul>
+            <li>sending a password would require the website to send (and possibly store) the password in plain text, which is a bad security practice</li>
+            <li>the capability URL can expire after it has been accessed, which means that even if the email or URL is shared later on, it doesn't provide ongoing access to the account</li>
+            <li>the capability URL can resolve to a page that forces the user to reset their password; if users were simply presented with a password or granted access to the entire system with the URL then they might not remember to reset their password</li>
+          </ul>
+        </section>
+        <section id="low-friction-accounts">
+          <h4 id="h4_low-friction-accounts" role="heading" aria-level="3"><span class="secno">3.1.2 </span>Low Friction Accounts</h4>
+          <p>
+            There are a proliferation of web-based services which provide for user accounts, to help record user preferences and history. Creating another user account can become a high burden for users, particularly when they don't expect to use the account very frequently.
+          </p>
+          <p>
+            Web-based applications that do not require user information in order to function may enable users to access the service without creating an account, or only prompt the user to create an account after they have used the service for a while.
+          </p>
+          <p>
+            Using capability URLs is beneficial to the more regular users of a web-based application because it enables them to collaborate with other people who are not regular users of the service. Regular users can create a resource and share a URL for that resource with their potential collaborators through another route (eg through email).
+          </p>
+          <p>
+            Capability URLs that are used to facilitate collaboration without requiring accounts are generally controlled by a regular user, who might wish to:
+          </p>
+          <ul>
+            <li>create different capability URLs for different people or groups that they wish to collaborate with</li>
+            <li>create different capability URLs for different types of action that they wish to permit on a resource (eg editing or commenting or viewing)</li>
+            <li>be able to revoke permissions for given capability URLs if they learn they have been shared outside the intended group</li>
+          </ul>
+        </section>
+        <section id="websites-without-accounts">
+          <h4 id="h4_websites-without-accounts" role="heading" aria-level="3"><span class="secno">3.1.3 </span>Websites without Accounts</h4>
+          <p>
+            Account management is seldom the main goal of a web-based application. Although it can be relatively easy for developers to plug in account management, there is an overhead involved: it can raise security concerns, and has legal implications because it involves storing personal data.
+          </p>
+          <p>
+            In some applications there is no risk of someone else deleting important work belonging to another user. This might be because the web application is not used to do important work. Or it might be that the application does not support destructive acts.
+          </p>
+          <p>
+            In these cases, it may be that the developer of a web application chooses to use capability URLs rather than supporting user accounts, letting them focus development on the main purpose of the application rather than account management.
+          </p>
+        </section>
+  		</section>
+  		
+      <section id="managing-access-on-sandboxed-domains">
+        <h3 id="h3_managing-access-on-sandboxed-domains" role="heading" aria-level="2"><span class="secno">3.2 </span>Managing Access on Sandboxed Domains</h3>
+        <p>
+          Sites that host content from untrusted users sometimes sandbox that content within separate per-user domains. This ensures that content managed by users isn't granted the privileges that are usually conferred by being on the same origin.
+        </p>
+        <p>
+          In these cases, however, access to private content on the user-specific domain cannot be controlled through copying the normal authentication cookies that the user has on the main site, because those cookies would give a route through the sandbox. Instead, <a href="http://googleonlinesecurity.blogspot.co.uk/2012/08/content-hosting-for-modern-web.html">per-document capability URLs can provide an alternative authentication mechanism</a>.
+        </p>
+        <div class="issue"><div id="h_issue_1" role="heading" aria-level="3" class="issue-title"><span>Issue 1</span></div><p class="">
+          I don't think I understand this approach well enough to document it properly. Specifically, given that cookies are domain-specific, I don't understand why copying cookies (for the user on their own domain) isn't a reasonable approach. Or issuing alternative cookies for that domain (effectively forcing them to login twice, once on the main site and once on the user-specific subdomain). Is that just about user experience?
+        </p></div>
+      </section>
+
+  		<section id="easy-delegation"> 
+  			<h3 id="h3_easy-delegation" role="heading" aria-level="2"><span class="secno">3.3 </span>Easy Delegation</h3>
+        <p>
+          A second set of reasons for supporting capability URLs is that it enables those with whom access is originally shared to continue to share that access with their own network.
+        </p>
+        <p>
+          For example, if a user is trying to arrange a meeting between organisations, they might not know all the people who should attend the meeting from other organisations. Under a normal account-based method, the user would typically have to gather the information about who should attend the meeting before granting each of those individuals access to the system. With a capability URL, they only have to share the URL with a representative from each organisation, and trust that representative to pass on the URL to whichever colleagues need to take part.
+        </p>
+        <p>
+          Capability URLs can thus enable permissions to flow through networks more easily than they can with an account-based system.
+        </p>
+  		</section>
+  		
+  		<section id="easy-client-api">
+  			<h3 id="h3_easy-client-api" role="heading" aria-level="2"><span class="secno">3.4 </span>Easy Client API</h3>
+        <p>
+          Authentication can be burdensome in HTTP APIs because HTTP is a stateless protocol and requires authentication tokens to be passed and processed on each transaction. This takes up both bandwidth and processing power, which can be a significant overhead for APIs that involve frequent, small, messages.
+        </p>
+        <p>
+          Capability URLs can be used instead. Clients:
+        </p>
+  			<ol>
+  				<li>perform authentication as normal</li>
+  				<li>request a list of capability URLs to use for the rest of the session</li>
+  				<li>use those URLs without authentication</li>
+  			</ol>
+        <p>
+          This removes the authentication cost on each transaction while keeping the exchanges fairly secure.
+        </p>
+        <div class="note"><div id="h_note_1" role="heading" aria-level="3" class="note-title"><span>Note</span></div><p class="">
+          There are larger issues here about using HTTP for frequent, small, messages. Arguably, HTTP isn't an appropriate protocol in these circumstances, or other workarounds such as long polling or pipelined requests would work better.
+        </p></div>
+  		</section>
+  	</section>
+  	
+  	<section rel="bibo:Chapter" resource="#disadvantages" typeof="bibo:Chapter" id="disadvantages">
+  		<!--OddPage--><h2 id="h2_disadvantages" role="heading" aria-level="1"><span class="secno">4. </span>Potential Issues</h2>
+      <p>
+        There are disadvantages to using capability URLs arising from the fact that the URLs were not originally designed to contain secret information.
+      </p>
+  		<section id="risk-of-exposure">
+  			<h3 id="h3_risk-of-exposure" role="heading" aria-level="2"><span class="secno">4.1 </span>Risk of Exposure</h3>
+  			<p>
+          In general, applications that use URLs are not designed to treat them as sensitive information. URLs appear within URL bars, from which they can be copied by people who see the URL bar (for example during a presentation or over someone's shoulder). They also appear in plain text within application logs, such as within web servers and in browser history.
+        </p>
+        <p>
+          There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
+        </p>
+        <p>
+          The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
+        </p>
+        <p>
+          In browsers where the URL bar also provides access to search, a copied capability URL can be mistakenly be passed through to a search engine, if the browser doesn't recognise that it is a URL (for example because of accidentally added whitespace).
+        </p>
+        <p>
+          Several browsers detect phishing by sending URLs that are accessed through them back to a central server. As there is no way for a browser to know that a particular URL is a capability URL, these are also sent back to a central server controlled by the browser vendor.
+        </p>
+        <p>
+          Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
+        </p>
+        <p>
+          In short, the risk of exposure of capability URLs can be quite high, particularly when they are accessed through a browser, unless safeguards are put in place.
+        </p>
+  		</section>
+
+  		<section id="handling-compromises">
+  			<h3 id="h3_handling-compromises" role="heading" aria-level="2"><span class="secno">4.2 </span>Handling Compromises</h3>
+        <p>
+          If a capability URL does leak out to unwanted recipients, the person who originally granted access through that URL needs to be able to revoke it. This is exactly the same as needs to happen in normal account-driven access control. However, capability URLs tend to be designed to be the same for everyone who has the given capability, and therefore revoking the capability URL has an impact on all those who had it. Conversely, in account-based access control it tends to be possible to target the withdrawal of rights on a single user.
+        </p>
+        <p>
+          It is possible to design systems that use capability URLs in a more targetted way, enabling users to generate multiple URLs for the same capability and to pass those on to different people. This would enable targetted revocation of access rights when a particular URL is compromised.
+        </p>
+  		</section>
+  		
+  		<section id="web-architecture">
+  			<h3 id="h3_web-architecture" role="heading" aria-level="2"><span class="secno">4.3 </span>Web Architecture</h3>
+  			<p>
+          Capability URLs encode a combination of a resource and access privileges for that resource. This leads to separate URLs being used to refer to the same resource (but with different permissions about what can be done with it). For example, Google Calendar provides different URLs for the same iCalendar representation of a calendar for public and private use.
+        </p>
+        <p>
+          Using multiple URLs for the same resource appears to run contrary to good practice:
+        </p>
+        <figure id="fig-architecture-of-the-world-wide-web-volume-one">
+    			<blockquote>
+    				<strong>Good practice: Avoiding URI aliases</strong>
+    				<br>
+    				A URI owner <em title="SHOULD NOT" class="rfc2119">SHOULD NOT</em> associate arbitrarily different URIs with the same resource.
+    			</blockquote>
+          <figcaption>Fig. <span class="figno">8</span> <span class="fig-title"><a href="http://www.w3.org/TR/webarch/#avoid-uri-aliases">Architecture of the World Wide Web, Volume One</a></span></figcaption>
+        </figure>
+        <p>
+          However, the main rationale for the recommendation to avoid URI aliases is based on sharing of the URI: it is better for everyone linking to, or talking about, the same resource to refer to it with the same URL, as this creates a more coherent network. Unlike normal URLs, capability URLs are oriented around only limited sharing. In these circumstances, having multiple aliases is not an issue.
+        </p>
+        <p>
+          What may need to be considered, however, is how to transition from providing access to a resource through capability URLs and taking it public, using a normal URL. This is discussed further in <a href="#canonical-urls" class="sectionRef sec-ref">section <span class="secno">5.4</span> <span class="sec-title">Canonical URLs</span></a>.
+        </p>
+  		</section>
+  		
+  		<section id="beyond-the-single-page">
+  			<h3 id="h3_beyond-the-single-page" role="heading" aria-level="2"><span class="secno">4.4 </span>Beyond the Single Page</h3>
+  			<p>
+          All the examples of capability URLs described in <a class="sectionRef sec-ref" href="#examples">section <span class="secno">2.</span> <span class="sec-title">Example Capability URLs</span></a> are self-contained: once a user has accessed a page through a capability URL, they are able to do all they need to do within that page. Capability URLs are less easy to use in applications that require the user to access multiple pages, because each of those pages must be accessed through a URL that contains a different secret.
+        </p>
+        <p>
+          Tahoe-LAFS uses a pattern whereby directories have capability URLs that grant access to all subresources within that directory, using a pattern like:
+        </p>
+        <pre>http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
+        <p>
+          This ensures that links between resources within that directory can be relative links that do not embed the unique capability key.
+        </p>
+  		</section>
+  	</section>
+  	
+  	<section rel="bibo:Chapter" resource="#recommendations" typeof="bibo:Chapter" id="recommendations">
+  		<!--OddPage--><h2 id="h2_recommendations" role="heading" aria-level="1"><span class="secno">5. </span>Recommendations</h2>
+
+      <p>
+        This section outlines recommendations about when and how to use capability URLs within web applications.
+      </p>
+
+  		<section id="application-design">
+  			<h3 id="h3_application-design" role="heading" aria-level="2"><span class="secno">5.1 </span>Application Design</h3>
+        <p>
+          In <a href="#advantages" class="sectionRef sec-ref">section <span class="secno">3.</span> <span class="sec-title">Reasons to Use Capabilty URLs</span></a> we outlined three situations in which capability URLs are useful:
+        </p>
+        <ul>
+          <li>To avoid the need for users to log in to perform an action.</li>
+          <li>To make it easy for those with whom you share URLs to share them with others.</li>
+          <li>To avoid authentication overheads in APIs.</li>
+        </ul>
+        <p>
+          If you are considering using capability URLs, you should consider other options, and weigh up the costs, risks and benefits of implementing them against the costs, risks and benefits of using capability URLs. For example:
+        </p>
+        <ul>
+          <li>Could access be restricted using an account-based mechanism instead?</li>
+          <li>Should you use a protocol other than HTTP?</li>
+        </ul>
+        <p>
+          If you have decided to use capability URLs, depending on the level of risk associated with the discovery of a capability URL, you should employ as many of the following security measures as possible:
+        </p>
+        <ul>
+          <li><strong>Capability URLs should be <code>https</code> URLs.</strong> This does not prevent all exposure of the URL but does prevent it from being available in plain text within the HTTP request for the URL.</li>
+          <li><strong>Pages that inform users of capability URLs should be encrypted, by being served through HTTPS.</strong> Again, this avoids plain text transmission of the URL.</li>
+          <li><strong>Capability URLs should expire.</strong> For example, it may be suitable to have a capability URL that can only be accessed once, or one that expires after a week. Password reset links should expire after the password has been successfully changed, or when the email address on the account changes.</li>
+          <li>
+            <p>
+              <strong>Pages accessed through a capability URL should not include links to third-party websites</strong>, unless the capability URLs include the secret key in the fragment identifier rather than the path of the URL. They should not include a mechanism for others to insert such links onto the page (eg through comments). If these are allowed, the use of the <code>Referer</code> should be managed by:
+            </p>
+            <ul>
+              <li>using <code>rel="noreferrer"</code> on the links</li>
+              <li>using a <code>Content-Security-Policy: referrer origin</code> HTTP header in the response for the page; <code>none</code> or <code>origin-when-cross-origin</code> could be used instead of <code>origin</code></li>
+              <li>using a <code>&lt;meta name="referrer" value="origin"&gt;</code> header within the HTML page; again <code>none</code> or <code>origin-when-cross-origin</code> could be used instead of <code>origin</code></li>
+            </ul>
+          </li>
+          <li><strong>Pages accessed through a capability URL should not include untrusted third-party scripts</strong>, regardless of which part of the URL contains the secret key. Scripts can always get access to the URL of the page they are within.</li>
+          <li>If capability URLs are controlled by an authenticated user, <strong>it should be possible for that user to revoke the capability URLs associated with the resource that they control</strong>. They should be able to create multiple such capability URLs so that they can revoke access through a compromised capability URL without affecting access from other capability URLs.</li>
+          <li><strong>The path under which capability URLs are found should be listed within <code>robots.txt</code></strong> to prevent them from being listed by those search engines that honour <code>robots.txt</code>. Do not list individual capability URLs within <code>robots.txt</code>.</li>
+          <li><strong>Access to the URL space in which capability URLs reside should be rate limited.</strong> This helps avoid attacks that attempt to identify capability URLs by enumerating the possible URLs.
+        </li></ul>
+        <p>
+          <strong>When capability URLs are used, they should be used within an appropriate HTTP verb to enable a relevant action.</strong> For example, an HTTP <code>GET</code> on a capability URL should not result in side effects such as the deletion of a resource. Capability URLs should encode access permissions for a resource, not actions on that resource.
+        </p>
+        <div class="note"><div id="h_note_2" role="heading" aria-level="3" class="note-title"><span>Note</span></div><p class="">
+          Several of these security measures are not possible or inconvenient for capability URLs that are delivered by email. For example, URLs in email can only be accessed through a <code>GET</code> request. It's recommended that those alternative security measures (such as rapid expiry) that can be used are used in these cases.
+        </p></div>
+        <p>
+          <strong>When capability URLs expire, servers should respond to the URL with either a <code>410 Gone</code> or a <code>404 Not Found</code> response.</strong> In practice, there is little difference between these responses: a <code>410 Gone</code> response requires the application to keep track of which capability URLs have been supported in the past; although this is more work for the application, it does prevent the reassignment of that capability URL to a new resource.
+        </p>
+  		</section>
+  		
+  		<section id="capability-url-design">
+  			<h3 id="h3_capability-url-design" role="heading" aria-level="2"><span class="secno">5.2 </span>Capability URL Design</h3>
+        <p>
+          <strong>Capability URLs must be unique, but they should also avoid being guessable.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
+        </p>
+        <p>
+          Good unique URLs include an unguessable unique identifier created through a secure random number generator. If a hash function is used to create the capability URL, for example a hash over a user name for a password reset, these should use an <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> or other algorithm that is not vulnerable to <a href="https://en.wikipedia.org/wiki/Length_extension_attack">length extension attacks</a>.
+        </p>
+        <div class="issue"><div id="h_issue_2" role="heading" aria-level="3" class="issue-title"><span>Issue 2</span></div><p class="">
+          This section needs to include a better discussion of "the appropriate sources of randomness, amount of entropy, signing / expiration algorithms, etc." as pointed out in this post from <a href="http://lists.w3.org/Archives/Public/www-tag/2014Jun/0003.html">Michal Zalewski</a>.
+        </p></div>
+        <p>
+          There are advantages to making capability URLs short, human readable and case-insensitive, to make it easier for them to be read out, for applications in which delegation is important, and robust against mis-typing. However, capability URLs should not be passed through URL shorteners that have lower protections against enumeration than the original capability URL.
+        </p>
+        <p>
+          Designing capability URLs to include the secret key in a fragment rather than in the main URL avoids some of the leakage possibilities associated with the <code>Referer</code> header. This is recommended in the <a href="http://waterken.sourceforge.net/web-key/">web-key proposal</a>. Note however that third-party scripts embedded within pages do have access to full URLs, including the fragment. In addition, this design means that fragment identifiers cannot be used in the normal way for web pages, namely to identify a fragment within the page.
+        </p>
+  		</section>
+      
+      <section id="ui-design-considerations">
+        <h3 id="h3_ui-design-considerations" role="heading" aria-level="2"><span class="secno">5.3 </span>UI Design Considerations</h3>
+        <p>
+          There is currently no way for built-in user interfaces, such as the location bar of a browser, to detect when a page is being accessed through a capability URL as opposed to a normal URL. 
+        </p>
+        <p>
+          To prevent the capability URL from being visible in the location bar, you can use the <code>replaceState()</code> method to replace the displayed URL with the canonical URL. However, this prevents the capability URL from being bookmarked by the user. In addition, if you do this, you should make sure the capability URL is replaced back into the history when the page is unloaded, otherwise it will not be possible for the user to navigate back to the page by navigating through their history.
+        </p>
+        <p>
+          <strong>Users who are provided with capability URLs to share with others should be informed of the consequences of those URLs being shared widely.</strong> Pages should describe what people who get the URL can do with it, and explain the ways in which these URLs can be shared safely.
+        </p>
+      </section>
+      
+      <section rel="bibo:Chapter" resource="#canonical-urls" typeof="bibo:Chapter" id="canonical-urls">
+        <h3 id="h3_canonical-urls" role="heading" aria-level="2"><span class="secno">5.4 </span>Canonical URLs</h3>
+        <p>
+          As outlined in <a href="#disadvantages" class="sectionRef sec-ref">section <span class="secno">4.</span> <span class="sec-title">Potential Issues</span></a>, <strong>servers should have a single canonical URL for a resource when there are several capability URLs that are used to provide access to that resource</strong>. This URL may be accessible by users who have the correct access privileges (granted through an account).
+        </p>
+        <p>
+          Canonical URLs may be used:
+        </p>
+        <ul>
+          <li>to list and provide control over the creation of capability URLs for the resource</li>
+          <li>as a URL that is transitioned to when a resource becomes public</li>
+          <li>as a public URL that anyone can access with limited privileges</li>
+          <li>as a common URL that can be used by anyone in annotations about the resource</li>
+        </ul>
+        <p>
+          If content is served directly from pages accessed through capability URLs, these pages can link to the canonical URL for the resource through <code>rel="canonical"</code> either in the metadata for the page (a <code>&lt;link&gt;</code> element) or within a <code>Link</code> header on the resource.
+        </p>
+        <p>
+          <strong>If the capability URLs refer to a resource that is later made public, they should respond with a <code>301 Moved Permanently</code> providing a redirection to the normal, public, canonical URL.</strong>
+        </p>
+      </section>
+  	</section>
+  	
+    <section id="future-work" class="appendix">
+      <!--OddPage--><h2 id="h2_future-work" role="heading" aria-level="1"><span class="secno">A. </span>Future Work</h2>
+      <p>
+        Following the above analysis, the TAG thinks that it would be useful to investigate adding a mechanism to indicate that a particular URL is a capability URL. Possible methods for this include:
+      </p>
+      <ul>
+        <li>a <a href="http://www.w3.org/TR/CSP/">Content Security Policy</a> directive</li>
+        <li>an HTTP header in responses to a request</li>
+        <li>a link relation on links to the capability URLs (particularly within email messages)</li>
+        <li>a recognised string within URLs</li>
+      </ul>
+      <p>
+        A browser or email client could then protect the URL in various ways such as:
+      </p>
+      <ul>
+        <li>obscuring the location bar</li>
+        <li>ensuring that the <code>Referer</code> header was not set</li>
+        <li>disallowing access to the page URL from any third-party scripts</li>
+        <li>hiding it within the history</li>
+        <li>sequestering access if there's suspicion that an account has been compromised</li>
+      </ul>
+    </section>
+  
+</body></html>
