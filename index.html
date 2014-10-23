@@ -10,7 +10,7 @@
 		</script>
     <script class="remove">
 var respecConfig = {
-    specStatus: "ED",
+    specStatus: "draft-finding",
     shortName: "capability-urls",
     //publishDate:  "2012-12-12",
     //previousPublishDate:  "",
@@ -51,7 +51,7 @@ var respecConfig = {
   <body>
     <section id="abstract">
       <p>
-        Capability URLs grant access to a resource to anyone who has the URL. There are particular application design patterns for which this is useful as they remove the necessity for users to log in to a site and are easily delegated to others. But their use can open up some security issues. URLs are not generally be kept secret, and there are various routes through which capability URLs can leak into unintended hands. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications, to minimise these risks.
+        Capability URLs grant access to a resource to anyone who has the URL. There are particular application design patterns for which this is useful as they remove the necessity for users to log in to a site and are easily delegated to others. But their use can open up some security issues. URLs are not generally required to be kept secret, and there are various routes through which capability URLs can leak into unintended hands. This document provides some good practices for web developers who wish to incorporate capability URLs into their applications, to minimise these risks.
       </p>
     </section>
     <section id="sotd">
@@ -78,6 +78,7 @@ var respecConfig = {
     		<li>advantages and disadvantages of using capability URLs to control access to content</li>
     		<li>design considerations when creating websites that use capability URLs</li>
     		<li>areas of technical development to support the use of capability URLs</li>
+        <li>Issues relating to keeping URLs secret</li>
     	</ul>
     </section>
   	<section id="examples">
@@ -317,27 +318,51 @@ var respecConfig = {
       </p>
   		<section>
   			<h3>Risk of Exposure</h3>
-  			<p>
-          In general, applications that use URLs are not designed to treat them as sensitive information. URLs appear within URL bars, from which they can be copied by people who see the URL bar (for example during a presentation or over someone's shoulder). They also appear in plain text within application logs, such as within web servers and in browser history.
-        </p>
-        <p>
-          There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
-        </p>
-        <p>
-          The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
-        </p>
-        <p>
-          In browsers where the URL bar also provides access to search, a copied capability URL can be mistakenly be passed through to a search engine, if the browser doesn't recognise that it is a URL (for example because of accidentally added whitespace).
-        </p>
-        <p>
-          Several browsers detect phishing by sending URLs that are accessed through them back to a central server. As there is no way for a browser to know that a particular URL is a capability URL, these are also sent back to a central server controlled by the browser vendor.
-        </p>
-        <p>
-          Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
-        </p>
-        <p>
-          In short, the risk of exposure of capability URLs can be quite high, particularly when they are accessed through a browser, unless safeguards are put in place.
-        </p>
+        <section>
+          <h4>Exposure Risk Analysis</h4>
+    			<p>
+            In general, applications that use URLs are not designed to treat them as sensitive information. URLs appear within URL bars, from which they can be copied by people who see the URL bar (for example during a presentation or over someone's shoulder). They also appear in plain text within application logs, such as within web servers and in browser history.
+          </p>
+          <p>
+            There are more subtle routes for exposure too. If a link to another site, including automatically followed links such as to images or scripts, is followed on a page accessed through a capability URL, that site may be notified of the capability URL through the <code>Referer</code> HTTP header. Third party scripts within a page accessed through a capability URL can access that URL and potentially record it elsewhere. Hosted services that synchronise browser histories and browser plugin toolbars can easily get hold of URLs for pages that someone using them visits.
+          </p>
+          <p>
+            The method by which a user gets the capability URL in the first place may also be compromised, enabling an ISP or web-based email service to become aware of the URL. Capability URLs will also be exposed to URL shortening services such as <code>t.co</code> if they are shared via Twitter direct messages.
+          </p>
+          <p>
+            In browsers where the URL bar also provides access to search, a copied capability URL can be mistakenly be passed through to a search engine, if the browser doesn't recognise that it is a URL (for example because of accidentally added whitespace).
+          </p>
+          <p>
+            Several browsers detect phishing by sending URLs that are accessed through them back to a central server. As there is no way for a browser to know that a particular URL is a capability URL, these are also sent back to a central server controlled by the browser vendor.
+          </p>
+          <p>
+            Any of these sources of URLs can be used by search engines and other crawlers, and may therefore result in pages protected through capability URLs being shown within search results.
+          </p>
+          <p>
+            In short, the risk of exposure of capability URLs can be quite high, particularly when they are accessed through a browser, unless safeguards are put in place.
+          </p>
+        </section>
+        <section>
+          <h4>Exposure Risk Scenarios</h4>
+          <p>
+            The following examples illustrate some problems that arise in common uses of Capability URLs.
+          </p>
+          <p class="example">
+            A capability URL is created by a public document management system and conveyed via suitably secure means to the author of the document.  The author then emails the URL to a friend, expecting that only the recipient of the email will have access to the document.
+          </p>
+          <p>
+            In practice, the security of the URL transfer will depend on the handling of email on the path from the sender to receiver, and what happens to it once received. Unencrypted protocols might be used on some portions of the transmission route (eg an unencrypted POP3 link), and if the document were of sufficient value a motivated attacker might sniff the link to retrieve the URL. The email might be buffered in queues at various points in transit, and those queues might be visible to administrators of the email transfer systems. The friend receiving the email might store her email in a reasonably inaccessible place, but might create unencrypted email backups that could eventually be read by others.
+          </p>
+          <p class="example">
+            Seeking to mitigate such risks, a password reset site emails a capability URL usable for password reset, but imposes a 15 minute timeout after which the URL is no longer accepted.
+          </p>
+          <p>
+            For many scenarios the timeout window will indeed provide acceptable security, but if the password is for a sufficiently high-value system, a motivated attacker might arrange to sniff and use the URL within the timeout window.
+          </p>
+          <p>
+            It is essential when deploying capability URLs to analyze risks such as these and to ensure that countermeasures are appropriate to the requirements of the application. For some applications, capability URLs will not provide sufficient security.
+          </p>
+        </section>
   		</section>
 
   		<section>
@@ -415,7 +440,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
           <li>Should you use a protocol other than HTTP?</li>
         </ul>
         <p>
-          If you have decided to use capability URLs, depending on the level of risk associated with the discovery of a capability URL, you should employ as many of the following security measures as possible:
+          <a href="#risks-of-exposure" class="sectionRef"></a> above highlights the challenges of protecting capability URLs from unintented discovery. When considering using capability URLs, you should ensure that such risks can me sufficiently mitigated to provide the security required for your application. The following techniques are recommended and will in many cases provide adequate security:
         </p>
         <ul>
           <li><strong>Capability URLs should be <code>https</code> URLs.</strong> This does not prevent all exposure of the URL but does prevent it from being available in plain text within the HTTP request for the URL.</li>
@@ -523,6 +548,13 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
         <li>hiding it within the history</li>
         <li>sequestering access if there's suspicion that an account has been compromised</li>
       </ul>
+    </section>
+
+    <section class="appendix">
+      <h2>Acknowledgements</h2>
+      <p>
+        Thanks in particular to Noah Mendelsohn for his suggested changes to this document.
+      </p>
     </section>
   </body>
 </html>
