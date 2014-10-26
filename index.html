@@ -56,7 +56,7 @@ var respecConfig = {
     </section>
     <section id="sotd">
       <p>
-        This is a proposed Working Draft, which is intended to eventually be published as a TAG Finding. It does not contain any normative content (eg about implementation compliance), only advice for developers.
+        This is a living document published as a TAG Finding. It does not contain any normative content (eg about implementation compliance), only advice for developers.
       </p>
     </section>
     <section id="intro">
@@ -271,9 +271,6 @@ var respecConfig = {
         <p>
           In these cases, however, access to private content on the user-specific domain cannot be controlled through copying the normal authentication cookies that the user has on the main site, because those cookies would give a route through the sandbox. Instead, <a href="http://googleonlinesecurity.blogspot.co.uk/2012/08/content-hosting-for-modern-web.html">per-document capability URLs can provide an alternative authentication mechanism</a>.
         </p>
-        <p class="issue">
-          I don't think I understand this approach well enough to document it properly. Specifically, given that cookies are domain-specific, I don't understand why copying cookies (for the user on their own domain) isn't a reasonable approach. Or issuing alternative cookies for that domain (effectively forcing them to login twice, once on the main site and once on the user-specific subdomain). Is that just about user experience?
-        </p>
       </section>
 
   		<section> 
@@ -478,10 +475,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
           <strong>Capability URLs must be unique, but they should also avoid being guessable.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
         </p>
         <p>
-          Good unique URLs include an unguessable unique identifier created through a secure random number generator. If a hash function is used to create the capability URL, for example a hash over a user name for a password reset, these should use an <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> or other algorithm that is not vulnerable to <a href="https://en.wikipedia.org/wiki/Length_extension_attack">length extension attacks</a>.
-        </p>
-        <p class="issue">
-          This section needs to include a better discussion of "the appropriate sources of randomness, amount of entropy, signing / expiration algorithms, etc." as pointed out in this post from <a href="http://lists.w3.org/Archives/Public/www-tag/2014Jun/0003.html">Michal Zalewski</a>.
+          Good unique URLs include an unguessable unique identifier created through a secure random number generator. You should use the cryptographically secure mechanisms available within your web application framework to create these secure random numbers, rather than trying to invent your own approach.
         </p>
         <p>
           There are advantages to making capability URLs short, human readable and case-insensitive, to make it easier for them to be read out, for applications in which delegation is important, and robust against mis-typing. However, capability URLs should not be passed through URL shorteners that have lower protections against enumeration than the original capability URL.
