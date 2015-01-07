@@ -481,7 +481,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
       <section>
         <h3>Capability URL Design</h3>
         <p>
-          <strong>Capability URLs must be unique, but they MUST also be hard to guess.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
+          <strong>Capability URLs must be unique, but they must also be hard to guess.</strong> For example, if capability URLs are generating using a URL like <code>https://example.org/access/{<var>number</var>}</code> and <var>number</var> is merely a sequentially increasing integer, it would be incredibly easy to scan through possible numbers to locate new information.
         </p>
         <p>
           One method to generate a good capability URL is to include an identifier created using a secure random number generator [[!RFC4086]]. A random value with sufficiently high entropy (120 bits or more) reduces the probability that the URL can be guessed correctly. A version 4 UUID [[UUID]] is sufficient, though other versions of UUID have insufficient entropy. For the same reason, a high entropy random value is sufficient to make a URL effectively unique. The probability that any two high entropy random values will be the same, either by guessing or accident, is negligible.
