@@ -14,18 +14,18 @@ var respecConfig = {
     shortName: "capability-urls",
     //publishDate:  "2012-12-12",
     //previousPublishDate:  "",
-    edDraftURI: "http://w3ctag.github.io/capability-urls/",
+    edDraftURI: "https://w3ctag.github.io/capability-urls/",
     // lcEnd: "3000-01-01",
     // crEnd: "3000-01-01",
     editors: [{
             name: "Jeni Tennison",
             company: "ODI",
-            companyURL: "http://www.theodi.org/"
+            companyURL: "https://theodi.org/"
         }],
     wg: "Technical Architecture Group",
-    wgURI: "http://www.w3.org/2001/tag/",
+    wgURI: "https://www.w3.org/2001/tag/",
     wgPublicList: "www-tag",
-    wgPatentURI: "http://www.w3.org/2001/tag/disclosures",
+    wgPatentURI: "https://www.w3.org/2001/tag/disclosures",
     otherLinks: [{
             key: "Repository",
             data: [{
@@ -79,7 +79,7 @@ var respecConfig = {
         The URLs used in the second method are known as <dfn>capability URLs</dfn>: an agent who possesses the URL is given the capability to access the information.
       </p>
       <p>
-        These methods of controlling access can be used in combination. For example, a session-specific token within the URL created by a form submission (a type of capability URL) helps to protect against <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site request forgery</a> where third-party pages can take advantage of the fact that a user has the necessary cookie to access a target page.
+        These methods of controlling access can be used in combination. For example, a session-specific token within the URL created by a form submission (a type of capability URL) helps to protect against <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site request forgery</a> where third-party pages can take advantage of the fact that a user has the necessary cookie to access a target page.
       </p>
         <p>This document describes:</p>
         <ul>
@@ -278,7 +278,7 @@ var respecConfig = {
           Sites that host content from untrusted users sometimes sandbox that content within separate per-user domains. This ensures that content managed by users isn't granted the privileges that are usually conferred by being on the same origin.
         </p>
         <p>
-          In these cases, however, access to private content on the user-specific domain cannot be controlled through copying the normal authentication cookies that the user has on the main site, because those cookies would give a route through the sandbox. Instead, <a href="http://googleonlinesecurity.blogspot.co.uk/2012/08/content-hosting-for-modern-web.html">per-document capability URLs can provide an alternative authentication mechanism</a>.
+          In these cases, however, access to private content on the user-specific domain cannot be controlled through copying the normal authentication cookies that the user has on the main site, because those cookies would give a route through the sandbox. Instead, <a href="https://security.googleblog.com/2012/08/content-hosting-for-modern-web.html">per-document capability URLs can provide an alternative authentication mechanism</a>.
         </p>
       </section>
 
@@ -395,7 +395,7 @@ var respecConfig = {
             <br />
             A URI owner SHOULD NOT associate arbitrarily different URIs with the same resource.
           </blockquote>
-          <figcaption><a href="http://www.w3.org/TR/webarch/#avoid-uri-aliases">Architecture of the World Wide Web, Volume One</a></figcaption>
+          <figcaption><a href="https://www.w3.org/TR/webarch/#avoid-uri-aliases">Architecture of the World Wide Web, Volume One</a></figcaption>
         </figure>
         <p>
           However, the main rationale for the recommendation to avoid URI aliases is based on sharing of the URI: it is better for everyone linking to, or talking about, the same resource to refer to it with the same URL, as this creates a more coherent network. Unlike normal URLs, capability URLs are oriented around only limited sharing. In these circumstances, having multiple aliases is not an issue.
@@ -536,7 +536,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
         Following the above analysis, the TAG thinks that it would be useful to investigate adding a mechanism to indicate that a particular URL is a capability URL. Possible methods for this include:
       </p>
       <ul>
-        <li>a <a href="http://www.w3.org/TR/CSP/">Content Security Policy</a> directive</li>
+        <li>a <a href="https://www.w3.org/TR/CSP/">Content Security Policy</a> directive</li>
         <li>an HTTP header in responses to a request</li>
         <li>a link relation on links to the capability URLs (particularly within email messages)</li>
         <li>a recognised string within URLs</li>
