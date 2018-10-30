@@ -6,13 +6,13 @@
     <title>
       Good Practices for Capability URLs
     </title>
-    <script class="remove" src="//www.w3.org/Tools/respec/respec-w3c-common">
+    <script class="remove" src="https://www.w3.org/Tools/respec/respec-w3c-common">
     </script>
     <script class="remove">
 var respecConfig = {
     specStatus: "draft-finding",
     shortName: "capability-urls",
-    //publishDate:  "2012-12-12",
+//    publishDate:  "2014-10-30",
     //previousPublishDate:  "",
     edDraftURI: "https://w3ctag.github.io/capability-urls/",
     // lcEnd: "3000-01-01",
@@ -446,7 +446,7 @@ http://example.org/${DIR-CAPABILITY}/path/to/resource</pre>
           <li>Should you use a protocol other than HTTP?</li>
         </ul>
         <p>
-          <a href="#risks-of-exposure" class="sectionRef"></a> above highlights the challenges of protecting capability URLs from unintented discovery. When considering using capability URLs, you should ensure that such risks can me sufficiently mitigated to provide the security required for your application. The following techniques are recommended and will in many cases provide adequate security:
+          <a href="#risk-of-exposure" class="sectionRef"></a> above highlights the challenges of protecting capability URLs from unintented discovery. When considering using capability URLs, you should ensure that such risks can me sufficiently mitigated to provide the security required for your application. The following techniques are recommended and will in many cases provide adequate security:
         </p>
         <ul>
           <li><strong>Capability URLs should be <code>https</code> URLs.</strong> This does not prevent all exposure of the URL but does prevent it from being available in plain text within the HTTP request for the URL.</li>
